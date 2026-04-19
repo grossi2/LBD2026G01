@@ -372,3 +372,31 @@ ALTER TABLE Precios ADD CONSTRAINT RefProductos21
 ;
 
 
+-- =========================================================================================================
+-- Poblar tablas
+-- =========================================================================================================
+
+-- Tabla Usuarios
+INSERT INTO Usuarios (Documento, Apellidos, Nombres, Contrasenia, Rol, Estado) VALUES
+(12345678, 'Apas',    	 'David',     'TYSONKING', 'Dueño',                 'A'),
+(12345678, 'Apas',    	 'Alberto',   'pass1234',  'Dueño',                 'A'),
+(23456789, 'Martinez',   'Ana',       'mart5678',  'Encargado de Planta',   'A'),
+(34567890, 'Lopez',      'Luis',      'lop9012',   'Vendedor',              'A'),
+(11223344, 'Fernandez',  'Maria',     'fern3456',  'Encargado de Deposito', 'I'),
+(22334455, 'Rodriguez',  'Jose',      'rod7890',   'Vendedor',              'A'),
+(33445566, 'Sanchez',    'Laura',     'san1234',   'Encargado de Planta',   'A'),
+(44556677, 'Perez',      'Ricardo',   'per5678',   'Vendedor',              'I'),
+(10203040, 'Gomez',      'Patricia',  'gom9012',   'Encargado de Deposito', 'A'),
+(20304050, 'Herrera',    'Miguel',    'her3456',   'Vendedor',              'A'),
+(30405060, 'Jimenez',    'Claudia',   'jim7890',   'Encargado de Planta',   'I'),
+(40506070, 'Morales',    'Diego',     'mor1234',   'Vendedor',              'A'),
+(15253545, 'Vargas',     'Sofia',     'var5678',   'Encargado de Deposito', 'A'),
+(25354555, 'Romero',     'Pablo',     'rom9012',   'Vendedor',              'A'),
+(35455565, 'Torres',     'Natalia',   'tor3456',   'Encargado de Planta',   'I'),
+(45556575, 'Diaz',       'Fernando',  'dia7890',   'Vendedor',              'A'),
+(14243444, 'Ruiz',       'Valentina', 'rui1234',   'Encargado de Deposito', 'A'),
+(24344454, 'Flores',     'Sebastian', 'flo5678',   'Vendedor',              'A'),
+(38291011, 'Castro',     'Gabriela',  'cas9012',   'Encargado de Planta',   'I'),
+(29381012, 'Mendoza',    'Andres',    'men3456',   'Vendedor',              'A'),
+(39481013, 'Ramos',      'Carolina',  'ram7890',   'Encargado de Deposito', 'A');
+
