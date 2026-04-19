@@ -1,12 +1,16 @@
---
--- ER/Studio 8.0 SQL Code Generation
--- Company :      GeroSRL
--- Project :      ModeloLogicoFisico1B.DM1
--- Author :       Gero
---
--- Date Created : Saturday, April 18, 2026 16:34:10
--- Target DBMS : MySQL 5.x
---
+-- Año: 2026
+-- Grupo: 01
+-- Integrantes: Apás David, Vargas Herrera Gerónimo
+-- Tema: Fabrica de plastico
+-- Nombre del Esquema: LBD2026G01CIBERPLAS
+-- Plataforma (SO + Versión): Windows 10
+-- Motor y Versión: MySQL Server 5.x (Community Edition)
+-- GitHub Repositorio: LBD2026G01
+-- GitHub Usuarios: davidApas, gerovargash
+
+-- =========================================================================================================
+-- Generar BD
+-- =========================================================================================================
 
 DROP SCHEMA IF EXISTS LBD2026G01CIBERPLAS;
 
@@ -14,26 +18,16 @@ CREATE SCHEMA IF NOT EXISTS LBD2026G01CIBERPLAS;
 
 USE LBD2026G01CIBERPLAS;
 
-DROP TABLE IF EXISTS Clientes
-;
-DROP TABLE IF EXISTS Depositos
-;
-DROP TABLE IF EXISTS Existencias
-;
-DROP TABLE IF EXISTS LineaDeMovimientos
-;
-DROP TABLE IF EXISTS ListaPrecio
-;
-DROP TABLE IF EXISTS MovimientoDeProductos
-;
-DROP TABLE IF EXISTS Precios
-;
-DROP TABLE IF EXISTS Productos
-;
-DROP TABLE IF EXISTS Sucursales
-;
-DROP TABLE IF EXISTS Usuarios
-;
+DROP TABLE IF EXISTS Clientes;
+DROP TABLE IF EXISTS Depositos;
+DROP TABLE IF EXISTS Existencias;
+DROP TABLE IF EXISTS LineaDeMovimientos;
+DROP TABLE IF EXISTS ListaPrecio;
+DROP TABLE IF EXISTS MovimientoDeProductos;
+DROP TABLE IF EXISTS Precios;
+DROP TABLE IF EXISTS Productos;
+DROP TABLE IF EXISTS Sucursales;
+DROP TABLE IF EXISTS Usuarios;
 -- 
 -- TABLE: Clientes 
 --
@@ -399,6 +393,8 @@ INSERT INTO Usuarios (Documento, Apellidos, Nombres, Contrasenia, Rol, Estado) V
 (38291011, 'Castro',     'Gabriela',  'cas9012',   'Encargado de Planta',   'I'),
 (29381012, 'Mendoza',    'Andres',    'men3456',   'Vendedor',              'A'),
 (39481013, 'Ramos',      'Carolina',  'ram7890',   'Encargado de Deposito', 'A');
+
+
 -- Tabla Productos
 INSERT INTO Productos (
     Nombre, 
@@ -430,6 +426,8 @@ INSERT INTO Productos (
 ('Pote 500cc PP', 'Pote de polipropileno para dosificación y sólidos.', 'PP', 'Blanco', '500 cc', '20 gr', 500, 'A'),
 ('Bidón 20L PEAD', 'Bidón de alta capacidad para líquidos industriales.', 'PEAD', 'Natural', '20 L', '800 gr', 10, 'A'),
 ('Tubo PVC Construcción', 'Tubo de PVC para instalaciones y sistemas de drenajes.', 'PVC', 'Gris', NULL, '1 kg', 10, 'I');
+
+
 -- Tabla Sucursales
 INSERT INTO Sucursales (
     Direccion, 
@@ -456,6 +454,8 @@ INSERT INTO Sucursales (
 ('Calle Güemes 800, San Salvador de Jujuy', 'Distribuidora oficial norte.', 'A'),
 ('Ruta 12 Km 5.5, Posadas, Misiones', 'Centro logístico fronterizo para el Mercosur.', 'A'),
 ('Parque Industrial Pilar, Lote 14, Buenos Aires', 'Nueva planta de inyección y matricería en construcción.', 'I');
+
+
 -- Tabla Depositos
 INSERT INTO Depositos (
     IdSucursal, 
@@ -483,6 +483,8 @@ INSERT INTO Depositos (
 (17, 'Galpón Minero', 'Acopio de envases de alta resistencia para uso industrial minero.', 'A'),
 (19, 'Depósito Frontera', 'Punto de acopio para exportación a países del Mercosur.', 'A'),
 (20, 'Nave Pilar (En Obra)', 'Futuro depósito centralizado de inyección, en construcción.', 'I');
+
+
 -- Tabla Clientes
 INSERT INTO Clientes (
 	Cuit, 
@@ -512,6 +514,8 @@ INSERT INTO Clientes (
 ('23-19191919-9', 'Gimenez', 'Clara', 'cgimenez@logistica.com.ar', 'Ruta 12 Km 5, Posadas', 'A'),
 ('20-20202020-2', 'Silva', 'Hugo', 'hsilva@construcciones.com', 'Av. Colón 4000, Córdoba', 'I'),
 ('27-21212121-1', 'Vargas', 'Marta', 'mvargas@agro.com', 'Ruta 3 Km 500, Rio Gallegos', 'A');
+
+
 -- Tabla Existencias
 INSERT INTO Existencias (
     IdProducto, 
@@ -538,6 +542,7 @@ INSERT INTO Existencias (
 (18, 5, 5500), -- Pote 500cc PP en Centro Logístico CABA
 (19, 18, 600), -- Bidón 20L PEAD en Galpón Minero
 (20, 13, 800); -- Tubo PVC Construcción en Nave Patagonia Norte
+
 
 -- Tabla Movimientos
 INSERT INTO MovimientoDeProductos (
@@ -567,6 +572,8 @@ INSERT INTO MovimientoDeProductos (
 (18, 5, 8, 12, 'F'), 
 (NULL, 19, 14, 14, 'P'), 
 (20, 2, 18, 15, 'F');
+
+
 -- Tabla Linea de Movimiento
 INSERT INTO LineaDeMovimientos (
     IdMovimiento, 
@@ -595,6 +602,8 @@ INSERT INTO LineaDeMovimientos (
 (18, 6, 400, 400, 1100.00),  -- Despacho a cliente 18: Envases 10L PEAD
 (19, 10, 800, 800, NULL),    -- Transferencia interna: Macetín 5L
 (20, 2, 300, 300, 3100.00);  -- Despacho a cliente 20: Cajones Cosecheros
+
+
 -- Tabla de Lista de Precios
 INSERT INTO ListaPrecio (
     Desde
@@ -619,6 +628,8 @@ INSERT INTO ListaPrecio (
 ('2026-03-15 11:00:00'), -- Lista 18
 ('2026-04-01 08:00:00'), -- Lista 19 (Lista vigente de principio de mes)
 (DEFAULT);               -- Lista 20 (Lista nueva, tomará la fecha/hora de tu PC)
+
+
 -- Tabla Precios
 INSERT INTO Precios (
     IdProducto, 
