@@ -39,7 +39,7 @@ Los modelos lógico y físico de la base de datos fueron diseñados con **ER/Stu
 1. Abrir **MySQL Workbench 8.0 CE**.
 2. Conectarse a la instancia de MySQL Server deseada.
 3. En el menú superior ir a **File → Open SQL Script...** y seleccionar el archivo `.sql` del proyecto.
-4. Revisar que el script incluya la creación de la base de datos (o crearla manualmente con `CREATE DATABASE ciberplas;` y luego `USE ciberplas;`).
+4. Revisar que el script incluya la creación de la base de datos (o crearla manualmente con `CREATE SCHEMA LBD2026G01CIBERPLAS;` y luego `USE LBD2026G01CIBERPLAS;`).
 5. Ejecutar el script completo con el botón ⚡ (**Execute**) o con el atajo `Ctrl + Shift + Enter`.
 6. Verificar en el panel **Schemas** que todas las tablas fueron creadas correctamente.
 
@@ -51,7 +51,10 @@ Los modelos lógico y físico de la base de datos fueron diseñados con **ER/Stu
 
 ```
 /
-├── README.md
-├── script.sql          # Script de creación de la base de datos
-└── LBD2026G01TP1Informe.pdf  # Informe del trabajo práctico
+├── Correciones TP1
+├    ├── ModeloLogicoFisicoCorregido.DM1
+├
+├── LBD2026G01TP2GeneracionDeLaBD.sql          # Script de creación de la base de datos
+├── LBD2026G01TP2QuerysDePrueba.sql          # Script de creación de la base de datos
+├── README.MD
 ```

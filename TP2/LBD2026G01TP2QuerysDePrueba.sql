@@ -1,3 +1,13 @@
+-- Año: 2026 TP2
+-- Grupo: 01
+-- Integrantes: Apás David, Vargas Herrera Gerónimo
+-- Tema: Fabrica de plastico
+-- Nombre del Esquema: LBD2026G01CIBERPLAS
+-- Plataforma (SO + Versión): Windows 10
+-- Motor y Versión: MySQL Server 5.x (Community Edition)
+-- GitHub Repositorio: LBD2026G01
+-- GitHub Usuarios: davidApas, gerovargash
+
 -- =========================================================================================================
 -- Consultas
 -- =========================================================================================================
