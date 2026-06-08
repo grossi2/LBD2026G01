@@ -591,7 +591,8 @@ INSERT INTO MovimientoDeProductos (
 (25, 8, 2, NULL, 15,    '2026-05-26 13:01:14', 'F'),
 (26, NULL, NULL, 2, 1, 	'2026-02-01 05:02:12', 'F'),
 (27, NULL, NULL, 2, 1, 	'2026-02-14 07:15:44', 'F'),
-(28, NULL, NULL, 2, 1, 	'2026-02-28 10:55:20', 'F');
+(28, NULL, NULL, 2, 1, 	'2026-02-28 10:55:20', 'F'),
+(29, 18, 5, NULL, 12, 	'2026-05-13 13:01:14', 'F'); 
 
 -- Tabla Linea de Movimiento
 INSERT INTO LineaDeMovimientos (
@@ -606,6 +607,8 @@ INSERT INTO LineaDeMovimientos (
 (3, 4, 500, 500, NULL),      -- Transferencia interna: Embudos (sin precio)
 (4, 13, 10, 10, 12000.00),   -- Despacho a cliente 4: Mangueras pesadas
 (5, 17, 1000, 1000, 250.75), -- Despacho a cliente 5: Envases 1L PET
+(5, 19, 120, 120, 99.32),    -- Despacho a cliente 5: Bidónes 20L PEAD
+(5, 20, 5, 5, 50.00),   	 -- Despacho a cliente 5: Tubos PVC Construcción
 (6, 18, 2000, 2000, NULL),   -- Transferencia interna: Potes PP
 (7, 8, 300, 300, 650.00),    -- Despacho a cliente 7: Envases 5L
 (8, 19, 100, 100, 4500.00),  -- Despacho a cliente 8: Bidones 20L
@@ -622,10 +625,14 @@ INSERT INTO LineaDeMovimientos (
 (19, 10, 800, 800, NULL),    -- Transferencia interna: Macetín 5L
 (20, 2, 300, 300, 3100.00),  -- Despacho a cliente 20: Cajones Cosecheros
 (23, 17, 1000, 1000, 250.75), -- Despacho a cliente 5: Envases 1L PET
+(23, 19, 250, 250, 156.40), -- Despacho a cliente 5: Bidónes 20L PEAD
 (24, 17, 500, 500, 250.75), -- Despacho a cliente 5: Envases 1L PET
-(25, 4, 300, 300, NULL),  -- Ingreso de productos
+(25, 4, 300, 300, 200),  
+(25, 6, 720, 720, 600),  
+(26, 4, 300, 300, NULL),  -- Ingreso de productos
 (27, 7, 700, 700, NULL),
-(28, 19, 1200, 1200, NULL);
+(28, 19, 1200, 1200, NULL),
+(29, 6, 500, 500, 1150.00);  -- Despacho a cliente 18: Envases 10L PEAD
 
 
 -- Tabla de Lista de Precios

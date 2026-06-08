@@ -8,6 +8,8 @@
 -- GitHub Repositorio: LBD2026G01
 -- GitHub Usuarios: davidApas, gerovargash
 
+USE LBD2026G01CIBERPLAS;
+
 -- =========================================================================================================
 -- 1. Trigger de inserción
 -- =========================================================================================================
@@ -126,7 +128,7 @@ SELECT * FROM Productos;
 
 UPDATE Productos 
 SET Color = 'Verde'
-WHERE IdProducto = 22;
+WHERE IdProducto = 2;
 
 SELECT * FROM Productos; 
 SELECT * FROM AuditoriaProductos;
@@ -164,7 +166,7 @@ DELIMITER ;
 SELECT * FROM Productos;
 
 DELETE FROM Productos
-WHERE IdProducto=23;
+WHERE IdProducto=21;
 
 SELECT * FROM AuditoriaProductos;
 -- =========================================================================================================
@@ -172,16 +174,16 @@ SELECT * FROM AuditoriaProductos;
 -- =========================================================================================================
 
 DROP PROCEDURE IF EXISTS AltaProducto;
-
 DELIMITER //
-CREATE PROCEDURE AltaProducto(pNombre VARCHAR(30), pDescripcionGeneral VARCHAR(255), pMaterial VARCHAR(30), pColor VARCHAR(30), pCapacidad VARCHAR(30), pPeso VARCHAR(30), pUnidadesPorPaquete SMALLINT, pEstado CHAR(1), OUT mensaje VARCHAR(100))
+CREATE PROCEDURE AltaProducto(pNombre VARCHAR(30), pDescripcionGeneral VARCHAR(255), pMaterial VARCHAR(30), pColor VARCHAR(30), 
+								pCapacidad VARCHAR(30), pPeso VARCHAR(30), pUnidadesPorPaquete SMALLINT, pEstado CHAR(1), OUT mensaje VARCHAR(100))
 -- Crea un producto siempre y cuando Nombre,Material,Color,Peso y Estado sean NOT NULL
 -- Ademas UnidadesPorPaquete sea > 0 y se verifica que el Estado sea el Activo o Inactivo
 -- La cláusula LEAVE permite salir del flujo de control que tiene la etiqueta dada
 -- Si la etiqueta es para el bloque más externo, se puede salir de todo el procedimiento.
 SALIR: BEGIN  
 
-	IF (pNombre IS NULL) OR (pMaterial IS NULL) OR (pColor IS NULL) OR (pPeso IS NULL) OR (pEstado IS NULL) THEN
+	IF (pNombre IS NULL OR pNombre = '') OR (pMaterial IS NULL OR pMaterial = '') OR (pColor IS NULL OR pColor = '') OR (pPeso IS NULL) OR (pEstado IS NULL) THEN
 		SET mensaje = 'Error en los datos del Producto, complete los campos nulos';
         LEAVE SALIR;
 	ELSEIF (pUnidadesPorPaquete <= 0) THEN
@@ -215,14 +217,13 @@ SELECT @mensaje_alta AS 'Resultado 3 (Error Cantidad)';
 CALL AltaProducto('Mesa Plástica', 'Uso exterior', 'PVC', 'Blanca', 'N/A', '4 kg', 1, 'X', @mensaje_alta);
 SELECT @mensaje_alta AS 'Resultado 4 (Error Estado)';
 
-Select * FROM Productos;
+SELECT * FROM Productos;
 
 -- =========================================================================================================
 -- 5. Modificación de un producto.
 -- =========================================================================================================
 
 DROP PROCEDURE IF EXISTS ModificarProducto;
-
 DELIMITER //
 CREATE PROCEDURE ModificarProducto(pIdProducto INT, pNombre VARCHAR(30), pDescripcionGeneral VARCHAR(255), pMaterial VARCHAR(30), pColor VARCHAR(30), pCapacidad VARCHAR(30), pPeso VARCHAR(30), pUnidadesPorPaquete SMALLINT, pEstado CHAR(1), OUT mensaje VARCHAR(100))
 
@@ -275,11 +276,10 @@ SELECT @mensaje_modificacion AS 'Resultado 4 (Error Estado)';
 Select * FROM Productos;
 
 -- =========================================================================================================
--- 5. Borrado de un producto.
+-- 6. Borrado de un producto.
 -- =========================================================================================================
 
 DROP PROCEDURE IF EXISTS BorrarProducto;
-
 DELIMITER //
 CREATE PROCEDURE BorrarProducto(IN pIdProducto INT, OUT mensaje VARCHAR(100))
 BEGIN
@@ -324,52 +324,128 @@ CALL BorrarProducto(9999, @mensaje_borrado);
 SELECT @mensaje_borrado AS 'Resultado 4 (Error No Existe)';
 
 -- =========================================================================================================
--- 6. Buscar un producto.
+-- 7. Buscar un producto
 -- =========================================================================================================
 
 DROP PROCEDURE IF EXISTS BuscarProducto;
-
 DELIMITER //
-CREATE PROCEDURE BuscarProducto(IN pIdProducto INT, OUT mensaje VARCHAR(100))
+CREATE PROCEDURE BuscarProducto(pNombre VARCHAR(30), pMaterial VARCHAR(30), pColor VARCHAR(30), pEstado CHAR(1))
+-- Busca productos en base a su nombre, material, color,y estado
+-- Si no se desea filtrar por nombre, material y/o color, se debe pasar estos parametros como NULL
+-- Se puede especificar solo productos activos "A", incativos "I", o todos "T"
 BEGIN
-	-- Controlo que ID del producto no sea nuelo
-    IF (pIdProducto IS NULL) THEN
-	SET mensaje = 'Error: Debe proporcionar un ID de producto válido, no puede ser nulo.';
-        
-    -- Controlo que ID del producto no sea ni cero o negativo
-    ELSEIF (pIdProducto <= 0) THEN
-	SET mensaje = 'Error: El ID del producto debe ser un número mayor a cero.';
-        
-    -- Verificamos si el producto realmente está en la fábrica
-    ELSEIF NOT EXISTS (SELECT 1 FROM Productos WHERE IdProducto = pIdProducto) THEN
-	SET mensaje = 'Error: El ID de producto indicado no existe en el sistema.';
-	
-    ELSE
-		SELECT * FROM Productos WHERE IdProducto=pIdProducto;
-        SET mensaje = 'Operación exitosa: Se encontro el producto solicitado.';
-		
-    END IF;
+	IF pEstado NOT IN ('A', 'I', 'T') THEN
+		SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Error: El estado de busqueda debe ser "A", "I" o "T".';
+	END IF;	
+
+	SELECT * FROM Productos WHERE 
+    Nombre LIKE CONCAT(CONCAT('%', COALESCE(pNombre, '')), '%') AND 
+    Material LIKE CONCAT(CONCAT('%', COALESCE(pMaterial, '')), '%') AND 
+    Color LIKE CONCAT(CONCAT('%', COALESCE(pColor, '')), '%') AND 
+    IF(pEstado = 'T', 1, Estado = pEstado);
 END  // 
-DELIMITER 
+DELIMITER ;
 
--- Llamada 1: Salida correcta (Busca y devuelve los datos del Macetín 1,7L)
-CALL BuscarProducto(9, @mensaje_busqueda);
-SELECT @mensaje_busqueda AS 'Resultado 1 (Correcto)';
+-- Llamada 1: Salida correcta
+CALL BuscarProducto(NULL, NULL, NULL, 'T');
+CALL BuscarProducto('Cajon', NULL, NULL, 'T');
+CALL BuscarProducto('Cajon', 'Reciclado', NULL, 'T');
+CALL BuscarProducto(NULL, NULL, NULL, 'I');
 
--- Llamada 2: Error Logico Por Nulo (Intenta buscar sin pasar un ID)
-CALL BuscarProducto(NULL, @mensaje_busqueda);
-SELECT @mensaje_busqueda AS 'Resultado 2 (Error Null)';
+-- Llamada 2: No se encontraron coincidencias)
+CALL BuscarProducto('HOLAA', NULL, NULL, 'T');
 
--- Llamada 3: Error Logico por numero Invalido (Negativo o cero)
-CALL BuscarProducto(-5, @mensaje_busqueda);
-SELECT @mensaje_busqueda AS 'Resultado 3 (Error Negativo o cero)';
+-- =========================================================================================================
+-- 8. Listado de los movimientos, mostrando los depósitos de origen y destino.
+-- Ordenados por fecha descendente. Mostrar los campos relevantes.
+-- =========================================================================================================
 
--- Llamada 4: Error Logico por ID Inexistente (No encuentra dicho ID en la tabla)
-CALL BuscarProducto(12, @mensaje_busqueda);
-SELECT @mensaje_busqueda AS 'Resultado 4 (Id Inexistente)';
+DROP PROCEDURE IF EXISTS ListarMovimientos;
+DELIMITER //
+CREATE PROCEDURE ListarMovimientos()
+BEGIN
+	SELECT COALESCE(depo.Nombre, '-') DepoOrigen, COALESCE(depd.Nombre, '-') DepoDestino, COALESCE(c.Direccion, '-') DirecCliente, mdp.FechaHora
+    FROM MovimientoDeProductos mdp
+    LEFT JOIN Depositos depo ON mdp.IdDepositoOrigen = depo.IdDeposito
+    LEFT JOIN Depositos depd ON mdp.IdDepositoDestino = depd.IdDeposito
+    LEFT JOIN Clientes c ON mdp.IdCliente = c.IdCliente
+    ORDER BY mdp.FechaHora DESC;
+END  // 
+DELIMITER ;
+
+CALL ListarMovimientos();
+
+-- =========================================================================================================
+-- 9. Reporte por IdCliente
+-- =========================================================================================================
+
+DROP PROCEDURE IF EXISTS ReporteCliente;
+DELIMITER //
+CREATE PROCEDURE ReporteCliente(pIdCliente INT)
+BEGIN
+	SELECT c.IdCliente, CONCAT(c.Nombres, ', ', c.Apellidos) Cliente, d.Nombre DepoOrigen, c.Direccion DirecDestino, SUM(ldm.CantidadDestino) CantProductos, SUM(ldm.PrecioFinal) MontoTot, mdp.FechaHora
+    FROM Clientes c
+    JOIN MovimientoDeProductos mdp ON c.IdCliente = mdp.IdCliente
+    JOIN Depositos d ON mdp.IdDepositoOrigen = d.IdDeposito
+    JOIN LineaDeMovimientos ldm ON mdp.IdMovimiento = ldm.IdMovimiento
+    WHERE c.IdCliente = pIdCliente
+	GROUP BY mdp.IdMovimiento, c.IdCliente,  CONCAT(c.Nombres, ', ', c.Apellidos), d.Nombre, c.Direccion
+    ORDER BY mdp.FechaHora DESC;
+END  // 
+DELIMITER ;
+
+CALL ReporteCliente(5);
+
+CALL ReporteCliente(2);
+
+CALL ReporteCliente(6);
+
+CALL ReporteCliente(8);
+
+CALL ReporteCliente(18);
+
+-- =========================================================================================================
+-- 10. Actualizar precios por inflacion
+-- Este SP debe tomar la ultima lista de precios y crear una nueva con los precios ajustados
+-- a un porcentaje que se pasa como parametro, este porcentaje puede ser negativo
+-- =========================================================================================================
+
+DROP PROCEDURE IF EXISTS ActualizarPreciosPorcentaje;
+DELIMITER //
+CREATE PROCEDURE ActualizarPreciosPorcentaje(pPorcentaje DECIMAL(5,2), OUT mensaje VARCHAR(100))
+SALIR: BEGIN
+	DECLARE pUltimoID INT;
+    
+    IF (pPorcentaje NOT BETWEEN -99.99 AND 999.99) OR pPorcentaje IS NULL THEN
+		SET mensaje = 'El porcentaje de ajuste debe estar entre -100% y 1000%';
+        LEAVE SALIR;
+    END IF;
+    
+    SET pUltimoID = (SELECT MAX(IdListaPrecio) FROM ListaPrecio);
+
+    INSERT INTO ListaPrecio VALUES (0, now());
+    INSERT INTO Precios (SELECT IdProducto, LAST_INSERT_ID(), Precio * (1 + (pPorcentaje / 100)) FROM Precios WHERE IdListaPrecio = pUltimoID);
+
+	SET mensaje = 'Ajuste aplicado correctamente';
+END  // 
+DELIMITER ;
+
+-- Llamada 1: Salida correcta
+CALL ActualizarPreciosPorcentaje(10.5, @mensaje);
+SELECT @mensaje;
+
+CALL ActualizarPreciosPorcentaje(-99, @mensaje);
+SELECT @mensaje;
+
+-- Llamada 2: Salida incorrecta, porcentaje fuera de rango
+CALL ActualizarPreciosPorcentaje(-100, @mensaje);
+SELECT @mensaje;
+
+-- Llamada 3: Salida incorrecta, porcentaje nulo
+CALL ActualizarPreciosPorcentaje(NULL, @mensaje);
+SELECT @mensaje;
+
+SELECT * FROM ListaPrecio ORDER BY 1 DESC;
+SELECT * FROM Precios ORDER BY 2 DESC;
 
 
-/*
-8. Listado de los movimientos, mostrando los depósitos de origen y destino.
-Ordenados por fecha descendente. Mostrar los campos relevantes.
-*/
